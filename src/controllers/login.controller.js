@@ -137,6 +137,7 @@ return res
   httpOnly: true,
   secure: isProduction,
   sameSite: isProduction ? 'None' : 'Strict',
+  domain: '.tituu.netlify.app',
   maxAge: 1000 * 60 * 60, // 1 hora de duración
 })
 .status(200)
