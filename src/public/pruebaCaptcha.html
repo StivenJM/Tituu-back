@@ -1,0 +1,30 @@
+<!-- HTML para probar el captcha
+ se va a borrar luego. Att: Daniel Lorences-->
+
+ <!-- ¡¡NO TOCAR ESTE CÓDIGO!! >:v -->
+
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Prueba de hCaptcha</title>
+  <script src="https://js.hcaptcha.com/1/api.js" async defer></script>
+</head>
+<body>
+  <form id="captcha-form">
+    <div class="h-captcha" data-sitekey="40949738-7d76-4b0a-8578-cce22a843154"></div>
+    <br>
+    <button type="submit">Enviar</button>
+  </form>
+
+  <script>
+    document.getElementById('captcha-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const token = document.querySelector('[name="h-captcha-response"]').value;
+      console.log('Token de hCaptcha:', token);
+    });
+  </script>
+</body>
+</html>

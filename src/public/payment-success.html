@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pago Exitoso</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+    </style>
+</head>
+<body>
+    <h1 id="status">Back Procesando el pago...</h1>
+    <p id="details">Por favor, espere mientras confirmamos su transacción.</p>
+
+    <script>
+        async function capturePayment(orderID) {
+            try {
+                const response = await fetch(`${process.env.BACKEND_URL}/api/payments/capture-payment`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ orderID })
+                });
+
+                const data = await response.json();
+                console.log('Respuesta del servidor:', data); // Para depuración
+
+                // Verificar si la captura fue exitosa
+                if (data.status === 'COMPLETED') {
+                    if (data.details && data.details.id) {
+                        // Si los detalles existen, mostramos el mensaje de éxito
+                        const { id, amount } = data.details;
+                        document.getElementById('status').innerText = '¡Pago Completado!';
+                        document.getElementById('details').innerText = `
+                            ID de la transacción: ${id}\n
+                            Monto: ${amount.value} ${amount.currency_code}
+                        `;
+                    } else {
+                        // Si los detalles no están presentes, indicamos que el pago fue completado
+                        document.getElementById('status').innerText = '¡Pago Completado!';
+                        document.getElementById('details').innerText = 'La transacción se completó, pero no se recibieron los detalles.';
+                    }
+                } else {
+                    // Si el estado no es COMPLETED
+                    document.getElementById('status').innerText = 'Pago no completado';
+                    document.getElementById('details').innerText = `Estado del pago: ${data.status}`;
+                }
+            } catch (error) {
+                // Manejo de errores
+                console.error('Error al capturar el pago:', error);
+                document.getElementById('status').innerText = 'Error en la transacción';
+                document.getElementById('details').innerText = 'No pudimos procesar su pago. Inténtelo nuevamente.';
+            }
+        }
+
+        // Leer el parámetro "token" de la URL
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const token = urlParams.get('token'); // Este es el orderID
+
+            console.log('Token recibido:', token);  // Para verificar si el parámetro token se está extrayendo correctamente
+
+            if (token) {
+                // Llama a la función de captura del pago
+                capturePayment(token);
+            } else {
+                document.getElementById('status').innerText = 'Error: No se encontró el token del pago.';
+                document.getElementById('details').innerText = 'Por favor, intente nuevamente.';
+            }
+        });
+    </script>
+</body>
+</html>
