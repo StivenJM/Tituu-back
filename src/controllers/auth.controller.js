@@ -61,5 +61,5 @@ export const getUserData = async (req, res) => {
 export const logout = (req, res) => {
   return res
   .clearCookie('access_token')
-  .json({ message: 'Logged out successfully' });
+  .json({ message: `Logged out successfully ${process.env.APP_ENV === 'production'}` });
 }
