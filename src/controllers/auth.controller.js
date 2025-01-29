@@ -63,8 +63,7 @@ export const logout = (req, res) => {
   .clearCookie('access_token', {
     httpOnly: true,
     secure: isProduction,
-    sameSite: isProduction ? 'None' : 'Strict',
-    maxAge: 1000 * 60 * 60, // 1 hora de duración
+    sameSite: isProduction ? 'None' : 'Strict'
   })
   .json({ message: `Logged out successfully` });
 }
