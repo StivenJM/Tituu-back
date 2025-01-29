@@ -60,6 +60,11 @@ export const getUserData = async (req, res) => {
 
 export const logout = (req, res) => {
   return res
-  .clearCookie('access_token')
-  .json({ message: `Logged out successfully ${process.env.APP_ENV === 'production'}` });
+  .clearCookie('access_token', {
+    httpOnly: true,
+    secure: isProduction,
+    sameSite: isProduction ? 'None' : 'Strict',
+    maxAge: 1000 * 60 * 60, // 1 hora de duración
+  })
+  .json({ message: `Logged out successfully` });
 }
