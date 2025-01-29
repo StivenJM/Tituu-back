@@ -141,7 +141,7 @@ return res
 })
 .status(200)
 .json({
-  message: `Inicio de sesión exitoso. ${isProduction}`,
+  message: "Inicio de sesión exitoso.",
   token,
   userName: user.fullName || user.email,
   role,
