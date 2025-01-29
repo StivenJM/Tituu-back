@@ -1,5 +1,7 @@
 import Client from "../models/client.model.js";
 
+const isProduction = process.env.APP_ENV === 'production';
+
 export const getData = async (req, res) => {
   // Esta funcion toma el token de login y envia la informacion almacenada en ese token
 
